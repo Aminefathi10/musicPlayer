@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Only Bangers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root{
+      
+  /*    background: url("https://images.pexels.com/photos/2098427/pexels-photo-2098427.jpeg?cs=srgb&amp;dl=pexels-eberhardgross-2098427.jpg&amp;fm=jpg"); */
+      padding-top: 10px;
+      padding-bottom: 10px;
+      background: #002;
+      background-size: cover;
+      background-attachment: fixed;
+      height: 100vh;
+      color: white;
+      overflow-y: auto;
+      font-family: Arial, sans-serif;
+    }
+  
+  body{
+    max-width: 360px;
+    margin: auto auto;
+    height: 100%
+  }
+    button{
+      font-size: 3em;
+      border: none;
+      outline: none;
+      color: white;
+      height: 2em;
+      position: relative;
+      
+      user-select: none;
+    }
+  button:active{
+    transform: translateY(2px);
+    transform: scale(0.95);
+  }
+    
+    .play{
+      margin: 10px auto;
+      background-color: #002;
+      display: block;
+      color: #39b;
+      width: calc(100% - 2px);
+      border-radius: 5555px;
+      position: relative;
+      animatin: render 500ms;
+    }
+  .play:active{
+    color: white;
+    transition: 100ms;
+  }
+    .play::after{
+      content: '';
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      background: linear-gradient(45deg, #93d, #28f, #19a, #28f, #93c);
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      border-radius: 25px;
+      z-index: -1;
+    }
+    .pause{
+      color: #f4a;
+      background-color: transparent;
+      border: #24a solid 1px;
+      padding: 3px 20px;
+      height: 3em;
+      font-size: 2em
+    }
+  .pause i:first-child{
+    margin-right: -10px;
+    font-size: 0.95em;
+  }
+  .next{
+    border: solid 1px #33d;
+    color: #39f;
+    background-color: transparent;
+    padding: 3px 20px;
+  }
+  .right{
+    border-radius: 0 5px 5px 0;
+  }
+  .left{
+    border-radius: 5px 0 0 5px;
+  }
+  .btns{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    overflow: hidden;
+  }
+  .btns *{
+    flex: 1;
+  }
+  label{
+    margin: 10px 2px;
+    display: flex;
+    align-items: center;
+    font-size: 2em;
+    color: #5fd;
+    font-weight: 600;
+  }
+  #songList{
+    width: 100%;
+    margin: 10px auto;
+    min-height: 14em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 12rem;
+  }
+  #songList div{
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+    background-color: #29d3;
+  }
+  .playing{
+    background-color: #29d6 !important;
+  }
+ 
+  
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <button class="play" onclick="play()">
+    PLAY
+  </button>
+  <br/>
+  <div class="btns">
+  <button class="next left" onclick="previous()">
+    <i class="fa-solid fa-angles-left"></i>
+  </button>
+  <button class="pause" onclick="pauseplay()">
+    <i class="fa-solid fa-play"></i>
+    <i class="fa-solid fa-pause"></i>
+  </button>
+  <button class="next right" onclick="next()">
+    <i class="fa-solid fa-angles-right"></i>
+  </button>
+  </div>
+    
+    <label for="loop">
+      <input onclick="loop(event)" type="checkbox" id="loop">
+      loop
+    </label>
+    <input type="range" onchange="skipTime(event)" id="timetrack" style="width: 100%">
+    <h3 id="songDis">get back</h3>
+    <h3 id="songtime">00:00</h3>
+    <div id="songList">
+      
+    </div>
+  <script>
+  
+   const songs = [
+                  "./POP SMOKE - INVINCIBLE.mp3",
+                  "./POP SMOKE - GET BACK.mp3",
+                  "./Pop Smoke - Dior.mp3",
+                  "2Pac - Ambitionz Az a Ridah.mp3",
+                  "./Welcome To The Party.mp3",
+                  "./Pop Smoke - Element.mp3",
+                  "./_MILLION_ POP SMOKE X CENTRAL CEE TYPE BEAT.mp3",
+                  "./Eternxlkz - HARD BEAT.mp3",
+                  "./Nightcrawler.mp3"
+                  ];
+    const audio = new Audio();
+    
+    var i = 0;
+    var isPlaying = false;
+    
+    function play() {
+      audio.src = songs[i];
+      audio.play();
+      setTimeout(() => {
+      document.getElementById("songDis").innerHTML = songs[i].slice(songs[i].indexOf("/") + 1, songs[i].lastIndexOf(".")) +
+   " - " + Math.floor(audio.duration/60).toString().padStart(2, "0") + ":" + (Math.round(audio.duration) % 60).toString().padStart(2, "0");
+        
+        document.title = songs[i].slice(songs[i].indexOf("/") + 1, songs[i].lastIndexOf("."));
+      }, 1000)
+      
+      setInterval(() => document.getElementById("songtime").innerHTML = Math.floor(audio.currentTime/60).toString().padStart(2, "0") 
+      + ":" + (Math.floor(audio.currentTime) % 60).toString().padStart(2, "0"), 1000);
+      
+      document.querySelectorAll("#songList div").forEach((el, index) => {
+        if(index === i) {
+          el.classList.add("playing")
+        } else {
+          el.classList.remove("playing")
+        }
+      })
+    }
+    
+    audio.onplay = () => isPlaying = true;
+    function pauseplay(){
+      if (isPlaying) { 
+        audio.pause();
+        isPlaying = false;
+      } else {
+        audio.play()
+      }
+      
+    }
+    
+    function next() {
+      i = i < songs.length-1 ? i+1 : 0;
+      play()
+    }
+    
+    audio.onended = () => next();
+  
+    function previous() {
+      i = i > 0 ? i-1 : songs.length -1;
+      play()
+    }
+    
+    function loop(e) {
+     audio.loop = e.target.checked;
+    }
+    
+    function skipTime(e) {
+      audio.currentTime = (e.target.value * audio.duration) / 100
+    }
+    
+    const timeInput = document.getElementById("timetrack");
+    setInterval(() => {
+      timeInput.value = (audio.currentTime * 100) / audio.duration
+    }, 1000);
+    
+    function playDisSong(index) {
+      i = index;
+      play();
+    }
+    document.getElementById("songList").innerHTML = 
+    songs.map(( el, index ) => `<div class="song" onclick="playDisSong(${index})">
+      <h3>${el.slice(el.indexOf("/")+1, el.lastIndexOf("."))}</h3>
+    </div>`).join("");
+    
+    
+  </script>
+</body>
+</html>
