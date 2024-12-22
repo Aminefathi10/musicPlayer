@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Only Bangers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <button class="play" onclick="play()">
+    Play
+  </button>
+  <br/>
+  <div class="btns">
+  <button class="next left" onclick="previous()">
+    <i class="fa-solid fa-angles-left"></i>
+  </button>
+  <button class="pause" onclick="pauseplay()">
+    <i class="fa-solid fa-play"></i>
+    <i class="fa-solid fa-pause"></i>
+  </button>
+  <button class="next right" onclick="next()">
+    <i class="fa-solid fa-angles-right"></i>
+  </button>
+  </div>
+    
+    <label for="loop">
+      <input onchange="loop(event)" type="checkbox" id="loop">
+      <div>
+        <i class="fa-solid fa-check"></i>
+      </div>
+      loop
+    </label>
+    <input type="range" onchange="skipTime(event)" id="timetrack" style="width: 100%">
+    <h3 id="songDis">get back</h3>
+    <h3 id="songtime">00:00</h3>
+    <div id="songList">
+      
+    </div>
+  <script src="./script.js"></script>
+</body>
+</html>
